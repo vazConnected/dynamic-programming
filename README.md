@@ -1,2 +1,5 @@
-# traveling-salesman-problem
-A solution to the traveling salesman problem.
+# Dynamic Programming
+My dynamic programming studies.
+
+# Applications
+- [Fibonacci](applications/fibonacci/)
