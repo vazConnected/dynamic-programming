@@ -2,4 +2,5 @@
 My dynamic programming studies.
 
 # Applications
-- [Fibonacci](applications/fibonacci/)
+- [Fibonacci](applications/fibonacci/);
+- [Grid Traveller](applications/gridTraveller/).
