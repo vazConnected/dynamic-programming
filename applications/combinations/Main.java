@@ -1,80 +1,38 @@
-import java.util.Scanner;
-import java.util.regex.Pattern;
-
 public class Main {
-    private static final int FIELD_GOAL = 3;
-    private static final int TOUCHDOWN_SIMPLE = 6;
-    private static final int TOUCHDOWN_EXTRA_1 = TOUCHDOWN_SIMPLE + 1;
-    private static final int TOUCHDOWN_EXTRA_2 = TOUCHDOWN_SIMPLE + 2;
+    private static int[] getAmericanSoccerScores() {
+        int FIELD_GOAL = 3;
+        int TOUCHDOWN_SIMPLE = 6;
+        int TOUCHDOWN_EXTRA_1 = TOUCHDOWN_SIMPLE + 1;
+        int TOUCHDOWN_EXTRA_2 = TOUCHDOWN_SIMPLE + 2;
 
-    private static final int[] americanSoccerScoreUnits = { FIELD_GOAL, TOUCHDOWN_SIMPLE, TOUCHDOWN_EXTRA_1,
-            TOUCHDOWN_EXTRA_2 };
-
-    private static int[] inputToMatchScore(String input) {
-        int[] matchScore = new int[2];
-        String[] inputScores = input.split("x");
-
-        matchScore[0] = Integer.parseInt(inputScores[0]);
-        matchScore[1] = Integer.parseInt(inputScores[1]);
-
-        return matchScore;
+        return new int[] { FIELD_GOAL, TOUCHDOWN_SIMPLE, TOUCHDOWN_EXTRA_1, TOUCHDOWN_EXTRA_2 };
     }
 
-    private static int[] calculateCombinations(int[] matchScore) {
-        Combinations combinationsTeamOne = new Combinations(americanSoccerScoreUnits, matchScore[0]);
-        Combinations combinationsTeamTwo = new Combinations(americanSoccerScoreUnits, matchScore[1]);
+    private static int[] getFootballCompetitionScores() {
+        int VICTORY = 3;
+        int DRAW = 1;
 
-        combinationsTeamOne.start();
-        combinationsTeamTwo.start();
-
-        try {
-            combinationsTeamOne.join();
-            combinationsTeamTwo.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return new int[] {
-                combinationsTeamOne.getCombinations(),
-                combinationsTeamTwo.getCombinations(),
-                combinationsTeamOne.getCombinations() * combinationsTeamTwo.getCombinations()
-        };
+        return new int[] { VICTORY, DRAW };
     }
 
-    private static String getValidUserInput() {
-        Pattern inputPattern = Pattern.compile("^\\d*x\\d*$"); // Match pattern: AxB
-        String input = "";
-
-        Scanner scanner = new Scanner(System.in);
-
-        boolean validEntry = false;
-        do {
-            System.out.print("\nType a American Soccer match score (example: XxY): ");
-            input = scanner.nextLine();
-
-            if (!inputPattern.matcher(input).matches()) {
-                System.err.println("Invalid entry. Press 'Enter' and type valid match score (AxB)");
-                scanner.nextLine(); // clear buffer
-            } else {
-                validEntry = true;
-            }
-        } while (!validEntry);
-        scanner.close();
-
-        return input;
+    private static int[] getBrazilianRealCoins() {
+        return new int[] { 1, 5, 10, 25, 50, 100 };
     }
 
     public static void main(String[] args) {
-        String userInput = getValidUserInput();
-        int[] matchScore = inputToMatchScore(userInput);
+        int coinsInCents = 243; // R$ 2.43
+        Combinations brazilianCoins = new Combinations(Main.getBrazilianRealCoins());
+        System.out.println("Possible combinations to get R$ " + ((float) coinsInCents / 100.0) + " using coins: "
+                + brazilianCoins.getCombinations(coinsInCents));
 
-        int[] combinations = Main.calculateCombinations(matchScore);
+        int teamScoreAmericanFootball = 15;
+        Combinations americanSoccer = new Combinations(Main.getAmericanSoccerScores());
+        System.out.println("Possible ways to score " + teamScoreAmericanFootball + " in a american football match: "
+                + americanSoccer.getCombinations(teamScoreAmericanFootball));
 
-        System.out.println("\n\nCombinations for team one (" + matchScore[0] + "): "
-                + combinations[0]);
-        System.out.println("Combinations for team two (" + matchScore[1] + "): "
-                + combinations[1]);
-        System.out.println("Match score combinations (" + matchScore[0] + "x" + matchScore[1] + "): "
-                + (combinations[2]));
+        int teamScoreFootballCompetition = 62;
+        Combinations footballCompatition = new Combinations(Main.getFootballCompetitionScores());
+        System.out.println("Possible ways to score " + teamScoreFootballCompetition + " in a football competition: "
+                + footballCompatition.getCombinations(teamScoreFootballCompetition));
     }
 }
